@@ -26,4 +26,18 @@ public interface UserService extends IService<User> {
      * @return 成功与否
      */
     boolean addUser(User user);
+
+    /**
+     * 更新用户
+     * @param user 用户
+     * @return 成功与否
+     */
+    boolean updateUser(User user);
+
+    /**
+     * 修改用户状态(有效切无效，无效切有效)
+     * @param id 用户ID
+     * @return 成功与否
+     */
+    boolean updateStatus(Long id);
 }

@@ -40,4 +40,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int result = userMapper.insert(PasswordSaltUtil.md5(user));
         return result >= 0;
     }
+
+    @Override
+    public boolean updateUser(User user) {
+        user.setUpdateTime(LocalDateTime.now());
+        int result = userMapper.updateById(user);
+        return result >= 0;
+    }
+
+    @Override
+    public boolean updateStatus(Long id) {
+        User user = userMapper.selectById(id);
+        if (user != null){
+            if (user.getStatus()){
+                user.setStatus(false);
+            }else {
+                user.setStatus(true);
+            }
+            user.setUpdateTime(LocalDateTime.now());
+            int result = userMapper.updateById(user);
+            return result >= 0;
+        }
+        return false;
+    }
 }
