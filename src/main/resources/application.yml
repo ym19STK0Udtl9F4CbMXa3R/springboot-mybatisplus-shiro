@@ -16,8 +16,8 @@ spring:
 # logger Config
 logging:
   level:
-    debug
+    cn.nines.scaffold: debug
 
 # mapper.xml 位置
 mybatis-plus:
-  mapper-locations: classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:/mapper/sys/*Mapper.xml

@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.nines.scaffold.sys.entity.Role">
-    <result column="id" property="id" />
+        <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="remark" property="remark" />
         <result column="status" property="status" />
@@ -14,8 +14,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,
-        name, remark, status, create_time, update_time
+        id, name, remark, status, create_time, update_time
     </sql>
 
 </mapper>

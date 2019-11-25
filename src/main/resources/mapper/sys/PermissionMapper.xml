@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.nines.scaffold.sys.entity.Permission">
-    <result column="id" property="id" />
+        <id column="id" property="id" />
         <result column="parent_id" property="parentId" />
         <result column="name" property="name" />
         <result column="remark" property="remark" />
@@ -17,8 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,
-        parent_id, name, remark, url, resource, status, create_time, update_time
+        id, parent_id, name, remark, url, resource, status, create_time, update_time
     </sql>
 
 </mapper>

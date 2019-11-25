@@ -2,6 +2,7 @@ package cn.nines.scaffold.sys.mapper;
 
 import cn.nines.scaffold.sys.entity.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Nines
  * @since 2019-11-25
  */
+@Repository
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 
 }
