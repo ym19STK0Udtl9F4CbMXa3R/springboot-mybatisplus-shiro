@@ -50,7 +50,7 @@ public class MysqlGenerator {
         // 配置项目路径
         String projectPath = System.getProperty("user.dir");
         // 和pakeage路径
-        gc.setOutputDir(projectPath + "/mybatis-plus-demo-generator/src/main/java");
+        gc.setOutputDir(projectPath + "/src/main/java");
         // 配置文件作者
         gc.setAuthor("Nines");
         gc.setOpen(false);
@@ -69,7 +69,7 @@ public class MysqlGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai");
+        dsc.setUrl("jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
@@ -79,7 +79,7 @@ public class MysqlGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("cn.nines.mybatisplus.demo");
+        pc.setParent("cn.nines.scaffold");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -102,7 +102,7 @@ public class MysqlGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/mybatis-plus-demo-generator/src/main/resources/mapper/" + pc.getModuleName()
+                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
