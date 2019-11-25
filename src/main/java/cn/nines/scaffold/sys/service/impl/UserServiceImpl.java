@@ -1,10 +1,15 @@
 package cn.nines.scaffold.sys.service.impl;
 
+import cn.nines.scaffold.common.util.PasswordSaltUtil;
 import cn.nines.scaffold.sys.entity.User;
 import cn.nines.scaffold.sys.mapper.UserMapper;
 import cn.nines.scaffold.sys.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,4 +22,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Resource
+    private UserMapper userMapper;
+
+    @Override
+    public User getUserByUsername(String username) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", username);
+        return userMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public boolean addUser(User user) {
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+//        user.setStatus(true);
+        int result = userMapper.insert(PasswordSaltUtil.md5(user));
+        return result >= 0;
+    }
 }
