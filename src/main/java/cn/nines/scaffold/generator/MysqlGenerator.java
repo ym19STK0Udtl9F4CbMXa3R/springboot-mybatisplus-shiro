@@ -1,5 +1,6 @@
 package cn.nines.scaffold.generator;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -57,8 +58,8 @@ public class MysqlGenerator {
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         // 文件覆盖
         gc.setFileOverride(true);
-        // 主键策略
-        // gc.setIdType(IdType.AUTO);
+        // 主键策略 默认 IdType.ID_WORKER 雪花算法
+         gc.setIdType(IdType.ID_WORKER);
         // 设置生成的 service 接口的名字的首字母是否为 I
         gc.setServiceName("%sService");
         // 生成基本的 resultMap
@@ -79,7 +80,7 @@ public class MysqlGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("cn.nines.scaffold");
+        pc.setParent("cn.nines.scaffold.demo");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -137,16 +138,19 @@ public class MysqlGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 列名生成策略 强调驼峰 underline_to_camel
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        //  自定义实体父类
-//        strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");
+
         // 【实体】是否为lombok模型
         strategy.setEntityLombokModel(true);
         // controller 是否为 rest风格
         strategy.setRestControllerStyle(true);
         // 公共父类
-//        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
-        // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id");
+//        strategy.setSuperControllerClass("cn.nines.scaffold.common.BaseController");
+
+        //  自定义实体父类
+//        strategy.setSuperEntityClass("cn.nines.scaffold.common.BaseEntity");
+        // 实体类 写于父类中的公共字段
+//        strategy.setSuperEntityColumns("id");
+
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
