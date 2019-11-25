@@ -1,13 +1,10 @@
 package cn.nines.scaffold.sys.controller;
 
 
+import cn.nines.scaffold.common.result.JsonResult;
 import cn.nines.scaffold.sys.entity.User;
 import cn.nines.scaffold.sys.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -27,13 +24,17 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/save")
-    public String saveUser(@RequestBody User user){
-        boolean f = userService.addUser(user);
-        System.out.println(f);
-        if (f){
-            return "添加成功";
+    public JsonResult saveUser(@RequestBody User user){
+        if (user.getId() == null){
+            return userService.addUser(user) ? JsonResult.success("添加成功") : JsonResult.error("添加失败");
+        }else {
+            return userService.updateUser(user) ? JsonResult.success("更新成功") : JsonResult.error("更新失败");
         }
-        return "添加失败";
+    }
+
+    @PutMapping("/{id}")
+    public JsonResult updateStatus(@PathVariable Long id){
+        return userService.updateStatus(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
     }
 
 }
