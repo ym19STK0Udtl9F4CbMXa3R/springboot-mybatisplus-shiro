@@ -1,6 +1,6 @@
-package cn.nines.scaffold.common.shiro;
+package cn.nines.scaffold.config.shiro;
 
-import cn.nines.scaffold.common.shiro.realm.UserRealm;
+import cn.nines.scaffold.config.shiro.realm.UserRealm;
 import cn.nines.scaffold.sys.service.PermissionService;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -14,7 +14,6 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 

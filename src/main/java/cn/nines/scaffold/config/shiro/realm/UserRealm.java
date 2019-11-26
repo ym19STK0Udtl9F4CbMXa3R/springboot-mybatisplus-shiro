@@ -1,4 +1,4 @@
-package cn.nines.scaffold.common.shiro.realm;
+package cn.nines.scaffold.config.shiro.realm;
 
 import cn.nines.scaffold.sys.entity.User;
 import cn.nines.scaffold.sys.service.UserService;
