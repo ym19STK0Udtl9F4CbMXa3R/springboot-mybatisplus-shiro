@@ -33,9 +33,14 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public JsonResult deleteUser(@PathVariable Long id){
+        return userService.freezeUserAndUserRoleByUserId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+    }
+
     @PutMapping("/{id}")
-    public JsonResult updateStatus(@PathVariable Long id){
-        return userService.updateStatus(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+    public JsonResult recoverUser(@PathVariable Long id){
+        return userService.recoverUserAndUserRoleByUserId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
     }
 
     @PostMapping("/findPage")

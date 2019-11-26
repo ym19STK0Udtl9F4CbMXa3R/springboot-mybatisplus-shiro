@@ -37,12 +37,18 @@ public interface UserService extends IService<User> {
     boolean updateUser(User user);
 
     /**
-     * 修改用户状态(有效切无效，无效切有效)
+     * 冻结用户
      * @param id 用户ID
      * @return 成功与否
      */
-    boolean updateStatus(Long id);
+    boolean freezeUserAndUserRoleByUserId(Long id);
 
+    /**
+     * 恢复用户
+     * @param id 用户ID
+     * @return 成功与否
+     */
+    boolean recoverUserAndUserRoleByUserId(Long id);
 
     /**
      * 获取用户列表
