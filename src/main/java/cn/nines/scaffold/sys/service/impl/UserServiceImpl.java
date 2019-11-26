@@ -60,6 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean updateUser(User user) {
+        // 查出原来数据，在原来数据的基础上修改，避免重要字段被恶意修改
         User previousUser = userMapper.selectById(user.getId());
         previousUser.setNickName(user.getNickName());
         previousUser.setEmail(user.getEmail());
