@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean addUser(User user) {
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
-//        user.setStatus(true);
+//        user.setStatus(true); 数据库添加该字段默认为 1
         int result = userMapper.insert(PasswordSaltUtil.md5(user));
         return result > 0;
     }
