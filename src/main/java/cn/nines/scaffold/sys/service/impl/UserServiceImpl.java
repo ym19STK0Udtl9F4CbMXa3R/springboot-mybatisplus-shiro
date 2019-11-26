@@ -74,12 +74,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Map findPage(String username, int current, int size) {
+    public Map findPage(String searchText, int current, int size) {
         Page<User> page = new Page<>(current, size);
 
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        if (!StringUtils.isEmpty(username)){
-            wrapper.like("username", username);
+        if (!StringUtils.isEmpty(searchText)){
+            wrapper.like("username", searchText);
         }
 
         IPage<User> userPage = userMapper.selectPage(page, wrapper);
