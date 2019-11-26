@@ -46,11 +46,11 @@ public interface UserService extends IService<User> {
 
     /**
      * 获取用户列表
-     * @param username 用户名
+     * @param searchText 用户名
      * @param current   当前页
      * @param size  每页显示条数
      * @return map
      */
-    Map findPage(String username, int current, int size);
+    Map findPage(String searchText, int current, int size);
 
 }

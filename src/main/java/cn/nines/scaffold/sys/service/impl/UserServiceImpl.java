@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUpdateTime(LocalDateTime.now());
 //        user.setStatus(true);
         int result = userMapper.insert(PasswordSaltUtil.md5(user));
-        return result >= 0;
+        return result > 0;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         previousUser.setUpdateTime(LocalDateTime.now());
 
         int result = userMapper.updateById(previousUser);
-        return result >= 0;
+        return result > 0;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             user.setUpdateTime(LocalDateTime.now());
             int result = userMapper.updateById(user);
-            return result >= 0;
+            return result > 0;
         }
         return false;
     }
