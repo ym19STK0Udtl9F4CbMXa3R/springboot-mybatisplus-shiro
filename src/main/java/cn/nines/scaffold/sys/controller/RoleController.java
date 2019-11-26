@@ -4,10 +4,13 @@ package cn.nines.scaffold.sys.controller;
 import cn.nines.scaffold.common.result.JsonResult;
 import cn.nines.scaffold.common.result.PageRequest;
 import cn.nines.scaffold.sys.entity.Role;
+import cn.nines.scaffold.sys.entity.UserRole;
 import cn.nines.scaffold.sys.service.RoleService;
+import cn.nines.scaffold.sys.service.UserRoleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -23,6 +26,9 @@ public class RoleController {
 
     @Resource
     private RoleService roleService;
+
+    @Resource
+    private UserRoleService userRoleService;
 
     @PostMapping("/save")
     public JsonResult saveUser(@RequestBody Role role){
@@ -47,6 +53,17 @@ public class RoleController {
     public JsonResult findOne(@PathVariable Long id){
         Role role = roleService.getById(id);
         return role == null ? JsonResult.error("获取失败") : JsonResult.success(role);
+    }
+
+
+    @GetMapping("/findUserRole/{uid}")
+    public JsonResult findUserRole(@PathVariable Long uid){
+        return JsonResult.success(userRoleService.findListByUid(uid));
+    }
+
+    @PostMapping("/modifyUserRole")
+    public JsonResult modifyUserRole(@RequestBody List<UserRole> userRoles){
+        return userRoleService.modifyUserRole(userRoles) ? JsonResult.success("分配成功") : JsonResult.error("分配失败");
     }
 
 }
