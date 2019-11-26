@@ -3,6 +3,8 @@ package cn.nines.scaffold.sys.service;
 import cn.nines.scaffold.sys.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  * 用户 服务类
@@ -40,4 +42,15 @@ public interface UserService extends IService<User> {
      * @return 成功与否
      */
     boolean updateStatus(Long id);
+
+
+    /**
+     * 获取用户列表
+     * @param username 用户名
+     * @param current   当前页
+     * @param size  每页显示条数
+     * @return map
+     */
+    Map findPage(String username, int current, int size);
+
 }

@@ -5,11 +5,16 @@ import cn.nines.scaffold.sys.entity.User;
 import cn.nines.scaffold.sys.mapper.UserMapper;
 import cn.nines.scaffold.sys.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -43,8 +48,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean updateUser(User user) {
-        user.setUpdateTime(LocalDateTime.now());
-        int result = userMapper.updateById(user);
+        User previousUser = userMapper.selectById(user.getId());
+        previousUser.setNickName(user.getNickName());
+        previousUser.setEmail(user.getEmail());
+        previousUser.setUpdateTime(LocalDateTime.now());
+
+        int result = userMapper.updateById(previousUser);
         return result >= 0;
     }
 
@@ -62,5 +71,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return result >= 0;
         }
         return false;
+    }
+
+    @Override
+    public Map findPage(String username, int current, int size) {
+        Page<User> page = new Page<>(current, size);
+
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(username)){
+            wrapper.like("username", username);
+        }
+
+        IPage<User> userPage = userMapper.selectPage(page, wrapper);
+
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("pages", userPage.getPages());
+        map.put("total", userPage.getTotal());
+        map.put("rows", userPage.getRecords());
+        return map;
     }
 }
