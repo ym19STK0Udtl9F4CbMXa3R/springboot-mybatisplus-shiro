@@ -30,12 +30,18 @@ public interface RoleService extends IService<Role> {
     boolean updateRole(Role role);
 
     /**
-     * 修改角色状态(有效切无效，无效切有效)
+     * 冻结角色
      * @param id 角色ID
      * @return 成功与否
      */
-    boolean updateStatus(Long id);
+    boolean freezeRoleAndRolePermissionByRoleId(Long id);
 
+    /**
+     * 解冻角色
+     * @param id 角色ID
+     * @return 成功与否
+     */
+    boolean recoverRoleAndRolePermissionByRoleId(Long id);
 
     /**
      * 获取角色列表
