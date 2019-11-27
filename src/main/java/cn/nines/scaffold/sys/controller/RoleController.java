@@ -57,7 +57,7 @@ public class RoleController {
      */
     @DeleteMapping("/{id}")
     public JsonResult deleteRole(@PathVariable Long id){
-        return roleService.freezeRoleAndRolePermissionByRoleId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+        return roleService.freezeRoleAndUserRoleAndRolePermissionByRoleId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
     }
 
     /**
@@ -67,7 +67,7 @@ public class RoleController {
      */
     @PutMapping("/{id}")
     public JsonResult recoverRole(@PathVariable Long id){
-        return roleService.recoverRoleAndRolePermissionByRoleId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+        return roleService.recoverRoleAndUserRoleAndRolePermissionByRoleId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
     }
 
     /**

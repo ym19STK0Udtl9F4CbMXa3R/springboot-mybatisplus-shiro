@@ -105,13 +105,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean freezeRoleAndRolePermissionByRoleId(Long id) {
+    public boolean freezeRoleAndUserRoleAndRolePermissionByRoleId(Long id) {
         return updateRoleAndRolePermissionByRoleId(id, false);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean recoverRoleAndRolePermissionByRoleId(Long id) {
+    public boolean recoverRoleAndUserRoleAndRolePermissionByRoleId(Long id) {
         return updateRoleAndRolePermissionByRoleId(id, true);
     }
 
