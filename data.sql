@@ -49,11 +49,13 @@ DROP TABLE IF EXISTS sys_permission;
 CREATE TABLE sys_permission
 (
   id BIGINT(20) NOT NULL COMMENT '主键ID',
-  parent_id BIGINT(20) NOT NULL COMMENT '父级ID',
+  parent_id BIGINT(20) NOT NULL DEFAULT 0 COMMENT '父级ID',
   name VARCHAR(50) NULL DEFAULT NULL COMMENT '权限名称',
   remark VARCHAR(100) DEFAULT NULL COMMENT '备注',
+  type smallint(1) DEFAULT 0 COMMENT '类型 0、菜单 1、功能',
+  sort smallint(6) DEFAULT NULL COMMENT '排序',
   url VARCHAR(100) DEFAULT NULL COMMENT '链接地址',
-  resource varchar(50) DEFAULT NULL COMMENT '资源名称',
+  perm_code varchar(50) DEFAULT NULL COMMENT '权限编码',
   status TINYINT(1) NOT NULL DEFAULT '1' COMMENT '0是禁用,1是启用',
   create_time DATETIME DEFAULT NULL COMMENT '创建时间',
   update_time DATETIME DEFAULT NULL COMMENT '更新时间',
