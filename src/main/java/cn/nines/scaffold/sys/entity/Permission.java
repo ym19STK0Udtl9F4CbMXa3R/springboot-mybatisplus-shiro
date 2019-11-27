@@ -1,14 +1,13 @@
 package cn.nines.scaffold.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Nines
- * @since 2019-11-25
+ * @since 2019-11-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,14 +47,24 @@ public class Permission implements Serializable {
     private String remark;
 
     /**
+     * 类型 0、菜单 1、功能
+     */
+    private Integer type;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * 链接地址
      */
     private String url;
 
     /**
-     * 资源名称
+     * 权限编码
      */
-    private String resource;
+    private String permCode;
 
     /**
      * 0是禁用,1是启用
