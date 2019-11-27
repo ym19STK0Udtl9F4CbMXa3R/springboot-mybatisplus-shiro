@@ -43,6 +43,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         previousPermission.setName(permission.getName());
         previousPermission.setParentId(permission.getParentId());
         previousPermission.setRemark(permission.getRemark());
+        previousPermission.setType(permission.getType());
+        previousPermission.setSort(permission.getSort());
         previousPermission.setUrl(permission.getUrl());
         previousPermission.setUpdateTime(LocalDateTime.now());
 
