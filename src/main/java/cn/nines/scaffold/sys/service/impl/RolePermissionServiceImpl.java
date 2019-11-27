@@ -3,8 +3,14 @@ package cn.nines.scaffold.sys.service.impl;
 import cn.nines.scaffold.sys.entity.RolePermission;
 import cn.nines.scaffold.sys.mapper.RolePermissionMapper;
 import cn.nines.scaffold.sys.service.RolePermissionService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +23,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission> implements RolePermissionService {
 
+    @Resource
+    private RolePermissionMapper rolePermissionMapper;
+
+    @Resource
+    private RolePermissionService rolePermissionService;
+
+    @Override
+    public List<RolePermission> findListByRid(Long rid) {
+        QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
+        wrapper.eq("role_id", rid);
+        return rolePermissionMapper.selectList(wrapper);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean modifyUserRole(List<RolePermission> rolePermissions) {
+        // 删除原表角色权限
+        QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
+        wrapper.eq("role_id", rolePermissions.get(0).getRoleId());
+        rolePermissionMapper.delete(wrapper);
+
+        // 迭代添加日期
+        rolePermissions.forEach(rolePermission -> {
+            rolePermission.setCreateTime(LocalDateTime.now());
+            rolePermission.setUpdateTime(LocalDateTime.now());
+        });
+
+        // 新增角色权限 并返回处理结果
+        return rolePermissionService.saveBatch(rolePermissions);
+    }
 }
