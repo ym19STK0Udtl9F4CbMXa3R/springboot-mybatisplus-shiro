@@ -30,12 +30,18 @@ public interface PermissionService extends IService<Permission> {
     boolean updatePermission(Permission permission);
 
     /**
-     * 修改权限状态(有效切无效，无效切有效)
+     * 冻结权限（角色权限表）
      * @param id 权限ID
      * @return 成功与否
      */
-    boolean updateStatus(Long id);
+    boolean freezePermissionAndRolePermissionByPermissionId(Long id);
 
+    /**
+     * 恢复权限（角色权限表）
+     * @param id 权限ID
+     * @return 成功与否
+     */
+    boolean recoverPermissionAndRolePermissionByPermissionId(Long id);
 
     /**
      * 获取权限列表

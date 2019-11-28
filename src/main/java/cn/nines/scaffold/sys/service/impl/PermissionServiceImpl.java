@@ -1,18 +1,23 @@
 package cn.nines.scaffold.sys.service.impl;
 
 import cn.nines.scaffold.sys.entity.Permission;
+import cn.nines.scaffold.sys.entity.RolePermission;
 import cn.nines.scaffold.sys.mapper.PermissionMapper;
+import cn.nines.scaffold.sys.mapper.RolePermissionMapper;
 import cn.nines.scaffold.sys.service.PermissionService;
+import cn.nines.scaffold.sys.service.RolePermissionService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +33,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Resource
     private PermissionMapper permissionMapper;
+
+    @Resource
+    private RolePermissionMapper rolePermissionMapper;
+
+    @Resource
+    private RolePermissionService rolePermissionService;
 
     @Override
     public boolean addPermission(Permission permission) {
@@ -52,9 +63,39 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return result > 0;
     }
 
-    @Override
-    public boolean updateStatus(Long id) {
+    private boolean updatePermissionAndRolePermissionByPermissionId(Long id, boolean status){
+        Permission permission = permissionMapper.selectById(id);
+        if (permission != null){
+            // // 冻结权限（恢复权限）
+            permission.setStatus(status);
+            permission.setUpdateTime(LocalDateTime.now());
+            permissionMapper.updateById(permission);
+
+            // 冻结角色权限表中的关联数据（恢复角色权限表中的关联数据） 权限相关角色
+            QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
+            wrapper.eq("permission_id", id);
+            List<RolePermission> rolePermissions = rolePermissionMapper.selectList(wrapper);
+
+            rolePermissions.forEach(rolePermission -> {
+                rolePermission.setStatus(status);
+                rolePermission.setUpdateTime(LocalDateTime.now());
+            });
+            rolePermissionService.updateBatchById(rolePermissions);
+            return true;
+        }
         return false;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean freezePermissionAndRolePermissionByPermissionId(Long id) {
+        return updatePermissionAndRolePermissionByPermissionId(id, false);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean recoverPermissionAndRolePermissionByPermissionId(Long id) {
+        return updatePermissionAndRolePermissionByPermissionId(id, true);
     }
 
     @Override

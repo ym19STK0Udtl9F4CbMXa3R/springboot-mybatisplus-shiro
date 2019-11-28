@@ -45,6 +45,26 @@ public class PermissionController {
     }
 
     /**
+     * 冻结权限
+     * @param id 权限ID
+     * @return JsonResult
+     */
+    @DeleteMapping("/{id}")
+    public JsonResult deletePermission(@PathVariable Long id){
+        return permissionService.freezePermissionAndRolePermissionByPermissionId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+    }
+
+    /**
+     * 恢复权限
+     * @param id 权限ID
+     * @return JsonResult
+     */
+    @PutMapping("/{id}")
+    public JsonResult recoverPermission(@PathVariable Long id){
+        return permissionService.recoverPermissionAndRolePermissionByPermissionId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+    }
+
+    /**
      * 分页信息
      * @param page 分页参数
      * @return JsonResult
