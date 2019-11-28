@@ -72,33 +72,37 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 冻结角色（恢复角色）
         Role role = roleMapper.selectById(id);
         if (role != null){
-            role.setStatus(status);
-            role.setUpdateTime(LocalDateTime.now());
-            roleMapper.updateById(role);
+            try {
+                role.setStatus(status);
+                role.setUpdateTime(LocalDateTime.now());
+                roleMapper.updateById(role);
 
-            // 冻结用户角色表中的关联数据（恢复用户角色表中的关联数据）角色相关用户
-            QueryWrapper<UserRole> userRoleWrapper = new QueryWrapper<>();
-            userRoleWrapper.eq("role_id", role.getId());
-            List<UserRole> userRoles = userRoleMapper.selectList(userRoleWrapper);
+                // 冻结用户角色表中的关联数据（恢复用户角色表中的关联数据）角色相关用户
+                QueryWrapper<UserRole> userRoleWrapper = new QueryWrapper<>();
+                userRoleWrapper.eq("role_id", role.getId());
+                List<UserRole> userRoles = userRoleMapper.selectList(userRoleWrapper);
 
-            userRoles.forEach(userRole -> {
-                userRole.setStatus(status);
-                userRole.setUpdateTime(LocalDateTime.now());
-            });
-            userRoleService.updateBatchById(userRoles);
+                userRoles.forEach(userRole -> {
+                    userRole.setStatus(status);
+                    userRole.setUpdateTime(LocalDateTime.now());
+                });
+                userRoleService.updateBatchById(userRoles);
 
-            // 冻结角色权限表中的关联数据（恢复角色权限表中的关联数据） 角色相关权限
-            QueryWrapper<RolePermission> rolePermissionWrapper = new QueryWrapper<>();
-            rolePermissionWrapper.eq("role_id", role.getId());
-            List<RolePermission> rolePermissions = rolePermissionMapper.selectList(rolePermissionWrapper);
+                // 冻结角色权限表中的关联数据（恢复角色权限表中的关联数据） 角色相关权限
+                QueryWrapper<RolePermission> rolePermissionWrapper = new QueryWrapper<>();
+                rolePermissionWrapper.eq("role_id", role.getId());
+                List<RolePermission> rolePermissions = rolePermissionMapper.selectList(rolePermissionWrapper);
 
-            rolePermissions.forEach(rolePermission -> {
-                rolePermission.setStatus(status);
-                rolePermission.setUpdateTime(LocalDateTime.now());
-            });
-            rolePermissionService.updateBatchById(rolePermissions);
+                rolePermissions.forEach(rolePermission -> {
+                    rolePermission.setStatus(status);
+                    rolePermission.setUpdateTime(LocalDateTime.now());
+                });
+                rolePermissionService.updateBatchById(rolePermissions);
 
-            return true;
+                return true;
+            }catch (Exception e){
+                return false;
+            }
         }
         return false;
     }

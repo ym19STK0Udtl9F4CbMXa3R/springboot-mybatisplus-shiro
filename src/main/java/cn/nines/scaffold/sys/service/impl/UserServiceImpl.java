@@ -74,22 +74,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 冻结用户（恢复用户）
         User user = userMapper.selectById(id);
         if (user != null){
-            user.setStatus(status);
-            user.setUpdateTime(LocalDateTime.now());
-            userMapper.updateById(user);
+            try {
+                user.setStatus(status);
+                user.setUpdateTime(LocalDateTime.now());
+                userMapper.updateById(user);
 
-            // 冻结用户角色表中的关联数据（恢复用户角色表中的关联数据）
-            QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
-            wrapper.eq("user_id", id);
-            List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
+                // 冻结用户角色表中的关联数据（恢复用户角色表中的关联数据）
+                QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
+                wrapper.eq("user_id", id);
+                List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
 
-            userRoles.forEach(userRole -> {
-                userRole.setStatus(status);
-                userRole.setUpdateTime(LocalDateTime.now());
-            });
+                userRoles.forEach(userRole -> {
+                    userRole.setStatus(status);
+                    userRole.setUpdateTime(LocalDateTime.now());
+                });
 
-            userRoleService.updateBatchById(userRoles);
-            return true;
+                userRoleService.updateBatchById(userRoles);
+                return true;
+            }catch (Exception e){
+                return false;
+            }
         }
         return false;
     }
