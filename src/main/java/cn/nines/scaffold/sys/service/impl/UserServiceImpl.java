@@ -7,7 +7,6 @@ import cn.nines.scaffold.sys.mapper.UserMapper;
 import cn.nines.scaffold.sys.mapper.UserRoleMapper;
 import cn.nines.scaffold.sys.service.UserRoleService;
 import cn.nines.scaffold.sys.service.UserService;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

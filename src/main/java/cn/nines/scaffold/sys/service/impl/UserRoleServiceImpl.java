@@ -3,7 +3,6 @@ package cn.nines.scaffold.sys.service.impl;
 import cn.nines.scaffold.sys.entity.UserRole;
 import cn.nines.scaffold.sys.mapper.UserRoleMapper;
 import cn.nines.scaffold.sys.service.UserRoleService;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
