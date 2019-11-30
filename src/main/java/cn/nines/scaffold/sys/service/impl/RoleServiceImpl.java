@@ -82,22 +82,27 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 userRoleWrapper.eq("role_id", role.getId());
                 List<UserRole> userRoles = userRoleMapper.selectList(userRoleWrapper);
 
-                userRoles.forEach(userRole -> {
-                    userRole.setStatus(status);
-                    userRole.setUpdateTime(LocalDateTime.now());
-                });
-                userRoleService.updateBatchById(userRoles);
+                if (userRoles.size() > 0){
+                    userRoles.forEach(userRole -> {
+                        userRole.setStatus(status);
+                        userRole.setUpdateTime(LocalDateTime.now());
+                    });
+                    userRoleService.updateBatchById(userRoles);
+                }
+
 
                 // 冻结角色权限表中的关联数据（恢复角色权限表中的关联数据） 角色相关权限
                 QueryWrapper<RolePermission> rolePermissionWrapper = new QueryWrapper<>();
                 rolePermissionWrapper.eq("role_id", role.getId());
                 List<RolePermission> rolePermissions = rolePermissionMapper.selectList(rolePermissionWrapper);
 
-                rolePermissions.forEach(rolePermission -> {
-                    rolePermission.setStatus(status);
-                    rolePermission.setUpdateTime(LocalDateTime.now());
-                });
-                rolePermissionService.updateBatchById(rolePermissions);
+                if (rolePermissions.size() > 0){
+                    rolePermissions.forEach(rolePermission -> {
+                        rolePermission.setStatus(status);
+                        rolePermission.setUpdateTime(LocalDateTime.now());
+                    });
+                    rolePermissionService.updateBatchById(rolePermissions);
+                }
 
                 return true;
             }catch (Exception e){

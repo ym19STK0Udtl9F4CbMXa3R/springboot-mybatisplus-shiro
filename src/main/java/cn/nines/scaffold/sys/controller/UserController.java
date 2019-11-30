@@ -87,7 +87,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public JsonResult findOne(@PathVariable Long id){
-        User user = userService.getById(id);
+        User user = userService.findOne(id);
         return user == null ? JsonResult.error("获取失败") : JsonResult.success(user);
     }
 

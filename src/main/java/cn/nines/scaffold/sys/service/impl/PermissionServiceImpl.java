@@ -77,11 +77,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 wrapper.eq("permission_id", id);
                 List<RolePermission> rolePermissions = rolePermissionMapper.selectList(wrapper);
 
-                rolePermissions.forEach(rolePermission -> {
-                    rolePermission.setStatus(status);
-                    rolePermission.setUpdateTime(LocalDateTime.now());
-                });
-                rolePermissionService.updateBatchById(rolePermissions);
+                if (rolePermissions.size() > 0){
+                    rolePermissions.forEach(rolePermission -> {
+                        rolePermission.setStatus(status);
+                        rolePermission.setUpdateTime(LocalDateTime.now());
+                    });
+                    rolePermissionService.updateBatchById(rolePermissions);
+                }
+
                 return true;
             }catch (Exception e){
                 return false;

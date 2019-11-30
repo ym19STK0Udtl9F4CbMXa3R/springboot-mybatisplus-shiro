@@ -7,6 +7,7 @@ import cn.nines.scaffold.sys.mapper.UserMapper;
 import cn.nines.scaffold.sys.mapper.UserRoleMapper;
 import cn.nines.scaffold.sys.service.UserRoleService;
 import cn.nines.scaffold.sys.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -82,13 +83,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
                 wrapper.eq("user_id", id);
                 List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
-
-                userRoles.forEach(userRole -> {
-                    userRole.setStatus(status);
-                    userRole.setUpdateTime(LocalDateTime.now());
-                });
-
-                userRoleService.updateBatchById(userRoles);
+                if (userRoles.size() > 0){
+                    userRoles.forEach(userRole -> {
+                        userRole.setStatus(status);
+                        userRole.setUpdateTime(LocalDateTime.now());
+                    });
+                    userRoleService.updateBatchById(userRoles);
+                }
                 return true;
             }catch (Exception e){
                 return false;
@@ -127,5 +128,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         map.put("total", userPage.getTotal());
         map.put("rows", userPage.getRecords());
         return map;
+    }
+
+    @Override
+    public User findOne(Long id) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        // 查询除 salt 字段外的字段
+        wrapper.select(User.class, tableFieldInfo -> !"salt".equals(tableFieldInfo.getColumn()));
+        return userMapper.selectOne(wrapper);
     }
 }
