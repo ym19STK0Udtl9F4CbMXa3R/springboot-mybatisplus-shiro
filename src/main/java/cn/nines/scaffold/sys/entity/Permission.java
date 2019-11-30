@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -27,7 +30,9 @@ public class Permission implements Serializable {
 
     /**
      * 主键ID
+     * JsonSerialize(using = ToStringSerializer.class)解决long精度丢失问题
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "id", type = IdType.ID_WORKER)
     private Long id;
 
