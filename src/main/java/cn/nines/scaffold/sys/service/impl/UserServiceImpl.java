@@ -117,6 +117,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!StringUtils.isEmpty(searchText)){
             wrapper.like("username", searchText);
         }
+        // 查询除 salt 字段外的字段
+        wrapper.select(User.class, tableFieldInfo -> !"salt".equals(tableFieldInfo.getColumn()));
 
         IPage<User> userPage = userMapper.selectPage(page, wrapper);
 
