@@ -59,4 +59,11 @@ public interface UserService extends IService<User> {
      */
     Map findPage(String searchText, int current, int size);
 
+    /**
+     * 通过ID获取用户
+     * @param id 用户ID
+     * @return user
+     */
+    User findOne(Long id);
+
 }
