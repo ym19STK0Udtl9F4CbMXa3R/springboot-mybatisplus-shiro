@@ -13,8 +13,7 @@ public class JsonResult {
 
     private boolean success;
     private String status;
-    private String msg;
-    private Object obj;
+    private Object data;
 
     public boolean isSuccess() {
         return success;
@@ -33,12 +32,12 @@ public class JsonResult {
 
     /**
      * 失败 (带消息）
-     * @param msg 需要返回的消息
+     * @param meg 需要返回的消息
      * @return result
      */
-    public static JsonResult error(String msg){
+    public static JsonResult error(String meg){
         JsonResult result = error();
-        result.setMsg(msg);
+        result.setData(meg);
         return result;
     }
 
@@ -55,23 +54,12 @@ public class JsonResult {
 
     /**
      * 成功
-     * @param msg 需要返回的消息
-     * @return result
-     */
-    public static JsonResult success(String msg){
-        JsonResult result = success();
-        result.setMsg(msg);
-        return result;
-    }
-
-    /**
-     * 成功
      * @param obj 需要返回的数据
      * @return result
      */
     public static JsonResult success(Object obj){
         JsonResult result = success();
-        result.setObj(obj);
+        result.setData(obj);
         return result;
     }
 
