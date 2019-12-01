@@ -3,6 +3,7 @@ package cn.nines.scaffold.sys.service;
 import cn.nines.scaffold.sys.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +15,12 @@ import java.util.Map;
  * @since 2019-11-25
  */
 public interface RoleService extends IService<Role> {
+
+    /**
+     * 查询所有角色数据
+     * @return list
+     */
+    List<Role> findList();
 
     /**
      * 添加角色

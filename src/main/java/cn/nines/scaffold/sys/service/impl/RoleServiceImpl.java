@@ -51,6 +51,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private RolePermissionService rolePermissionService;
 
     @Override
+    public List<Role> findList() {
+        return roleMapper.selectList(null);
+    }
+
+    @Override
     public boolean addRole(Role role) {
         role.setCreateTime(LocalDateTime.now());
         role.setUpdateTime(LocalDateTime.now());

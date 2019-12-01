@@ -31,6 +31,17 @@ public class UserController {
     private UserRoleService userRoleService;
 
     /**
+     * 判断用户名是否存在
+     * @param username 用户名
+     * @return msg：操作是否成功
+     */
+    @GetMapping("/exists")
+    public JsonResult findByUsername(String username){
+        User user = userService.getUserByUsername(username);
+        return user == null ? JsonResult.success("用户名可用") : JsonResult.error("用户名已存在");
+    }
+
+    /**
      * 添加用户
      * @param user 用户
      * @return JsonResult

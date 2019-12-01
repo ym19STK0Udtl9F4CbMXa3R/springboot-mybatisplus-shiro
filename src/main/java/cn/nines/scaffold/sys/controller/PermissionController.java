@@ -4,10 +4,12 @@ package cn.nines.scaffold.sys.controller;
 import cn.nines.scaffold.common.result.JsonResult;
 import cn.nines.scaffold.common.result.PageRequest;
 import cn.nines.scaffold.sys.entity.Permission;
+import cn.nines.scaffold.sys.entity.PermissionTreeNode;
 import cn.nines.scaffold.sys.service.PermissionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -83,6 +85,16 @@ public class PermissionController {
     public JsonResult findOne(@PathVariable Long id){
         Permission permission = permissionService.getById(id);
         return permission == null ? JsonResult.error("获取失败") : JsonResult.success(permission);
+    }
+
+    /**
+     * 获取权限树
+     * @return 树
+     */
+    @GetMapping("/findPermissionTree")
+    public JsonResult findListByParentId(){
+        List<PermissionTreeNode> tree = permissionService.findPermissionTree();
+        return JsonResult.success(tree);
     }
 
 }

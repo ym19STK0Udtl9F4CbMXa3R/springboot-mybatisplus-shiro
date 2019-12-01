@@ -31,6 +31,16 @@ public class RoleController {
     private RolePermissionService rolePermissionService;
 
     /**
+     * 获取所有角色信息
+     * @return list
+     */
+    @GetMapping("/list")
+    public JsonResult getRoleList(){
+        List<Role> roles = roleService.findList();
+        return JsonResult.success(roles);
+    }
+
+    /**
      * 添加角色
      * @param role 角色
      * @return JsonResult

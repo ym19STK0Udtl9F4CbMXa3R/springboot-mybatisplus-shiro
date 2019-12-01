@@ -1,11 +1,13 @@
 package cn.nines.scaffold.sys.service.impl;
 
 import cn.nines.scaffold.sys.entity.Permission;
+import cn.nines.scaffold.sys.entity.PermissionTreeNode;
 import cn.nines.scaffold.sys.entity.RolePermission;
 import cn.nines.scaffold.sys.mapper.PermissionMapper;
 import cn.nines.scaffold.sys.mapper.RolePermissionMapper;
 import cn.nines.scaffold.sys.service.PermissionService;
 import cn.nines.scaffold.sys.service.RolePermissionService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,4 +125,47 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         map.put("rows", userPage.getRecords());
         return map;
     }
+
+    @Override
+    public List<PermissionTreeNode> findPermissionTree() {
+        // 第一层
+        List<Permission> permissions = findListByParentId((long) 0);
+        // 循环权限添加到树
+        return addNodeToTree(permissions);
+    }
+
+    /**
+     * 添加节点到树
+     * @param permissions 权限
+     */
+    private List<PermissionTreeNode> addNodeToTree(List<Permission> permissions){
+        // 创建树
+        List<PermissionTreeNode> tree = new ArrayList<>();
+        // 遍历权限
+        permissions.forEach(permission -> {
+            // 查询是否有子节点
+            List<Permission> childrenPermissions = findListByParentId(permission.getId());
+            if (childrenPermissions.size() > 0){
+                // 获取子树
+                List<PermissionTreeNode> childrenTree = addNodeToTree(childrenPermissions);
+                // 添加当前节点到树，有子节点
+                tree.add(new PermissionTreeNode(permission.getId(), permission.getName(), childrenTree));
+            }else {
+                // 添加当前节点到树，没有子节点
+                tree.add(new PermissionTreeNode(permission.getId(), permission.getName(), null));
+            }
+        });
+        return tree;
+    }
+
+    /**
+     * 通过parentID查询父权限的子权限
+     * @return List<Permission>
+     */
+    private List<Permission> findListByParentId(Long parentId){
+        QueryWrapper<Permission> wrapper = new QueryWrapper<>();
+        wrapper.eq("parent_id",parentId).orderByAsc("sort");
+        return permissionMapper.selectList(wrapper);
+    }
+
 }
