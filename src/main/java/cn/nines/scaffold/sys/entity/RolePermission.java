@@ -39,11 +39,13 @@ public class RolePermission implements Serializable {
     /**
      * 角色ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long roleId;
 
     /**
      * 权限ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long permissionId;
 
     /**

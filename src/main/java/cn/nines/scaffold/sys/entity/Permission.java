@@ -39,6 +39,7 @@ public class Permission implements Serializable {
     /**
      * 父级ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**
