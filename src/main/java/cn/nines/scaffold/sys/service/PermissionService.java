@@ -60,4 +60,9 @@ public interface PermissionService extends IService<Permission> {
      */
     List<PermissionTreeNode> findPermissionTree();
 
+    /**
+     * 获取父级菜单
+     * @return lsit
+     */
+    List<Permission> findMenuList();
 }

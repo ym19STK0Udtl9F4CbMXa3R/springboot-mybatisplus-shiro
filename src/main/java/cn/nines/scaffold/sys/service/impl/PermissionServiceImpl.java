@@ -116,6 +116,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (!StringUtils.isEmpty(searchText)){
             wrapper.like("name", searchText);
         }
+        wrapper.orderByAsc("sort");
 
         IPage<Permission> userPage = permissionMapper.selectPage(page, wrapper);
 
@@ -132,6 +133,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         List<Permission> permissions = findListByParentId((long) 0);
         // 循环权限添加到树
         return addNodeToTree(permissions);
+    }
+
+    @Override
+    public List<Permission> findMenuList() {
+        QueryWrapper<Permission> wrapper = new QueryWrapper<>();
+        wrapper.in("type",0,1);
+        return permissionMapper.selectList(wrapper);
     }
 
     /**

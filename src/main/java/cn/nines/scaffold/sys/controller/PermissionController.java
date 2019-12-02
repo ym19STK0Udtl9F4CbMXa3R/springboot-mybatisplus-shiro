@@ -97,4 +97,10 @@ public class PermissionController {
         return JsonResult.success(tree);
     }
 
+    @GetMapping("/findMenuList")
+    public JsonResult findMenuList(){
+        List<Permission> menu = permissionService.findMenuList();
+        return JsonResult.success(menu);
+    }
+
 }
