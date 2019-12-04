@@ -1,5 +1,6 @@
 package cn.nines.scaffold.common.result;
 
+import cn.nines.scaffold.config.exception.ExceptionEnum;
 import lombok.Data;
 
 /**
@@ -41,6 +42,10 @@ public class ResponseJson {
 
     public static ResponseJson error(int code, String msg){
         return new ResponseJson(code, msg, null);
+    }
+
+    public static ResponseJson error(ExceptionEnum exce){
+        return new ResponseJson(exce.getExceptionCode(), exce.getExceptionMsg(), null);
     }
 
     public static ResponseJson success(String msg){
