@@ -19,16 +19,16 @@
 
     <insert id="insertAllBatch" parameterType="java.util.List">
         insert into sys_user_role(
-          id, user_id, role_id, create_time, update_time
+        id, user_id, role_id, create_time, update_time
         )
         values
         <foreach collection="list" item="item" index="index" separator="," >
             (
-                #{item.id},
-                #{item.userId},
-                #{item.roleId},
-                #{item.createTime},
-                #{item.updateTime}
+            #{item.id},
+            #{item.userId},
+            #{item.roleId},
+            #{item.createTime},
+            #{item.updateTime}
             )
         </foreach>
     </insert>
@@ -45,5 +45,6 @@
             </where>
         </foreach>
     </update>
+
 
 </mapper>
