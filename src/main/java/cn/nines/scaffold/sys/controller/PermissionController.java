@@ -1,7 +1,7 @@
 package cn.nines.scaffold.sys.controller;
 
 
-import cn.nines.scaffold.common.result.JsonResult;
+import cn.nines.scaffold.common.result.ResponseJson;
 import cn.nines.scaffold.common.result.PageRequest;
 import cn.nines.scaffold.sys.entity.Permission;
 import cn.nines.scaffold.sys.entity.PermissionTreeNode;
@@ -30,64 +30,64 @@ public class PermissionController {
     /**
      * 添加权限
      * @param permission 权限
-     * @return JsonResult
+     * @return ResponseJson
      */
     @PostMapping("/add")
-    public JsonResult addPermission(@RequestBody Permission permission){
-        return permissionService.addPermission(permission) ? JsonResult.success("添加成功") : JsonResult.error("添加失败");
+    public ResponseJson addPermission(@RequestBody Permission permission){
+        return permissionService.addPermission(permission) ? ResponseJson.success("添加成功") : ResponseJson.error("添加失败");
     }
 
     /**
      * 修改权限
      * @param permission 权限
-     * @return JsonResult
+     * @return ResponseJson
      */
     @PutMapping("/update")
-    public JsonResult updatePermission(@RequestBody Permission permission){
-        return permissionService.updatePermission(permission) ? JsonResult.success("更新成功") : JsonResult.error("更新失败");
+    public ResponseJson updatePermission(@RequestBody Permission permission){
+        return permissionService.updatePermission(permission) ? ResponseJson.success("更新成功") : ResponseJson.error("更新失败");
     }
 
     /**
      * 冻结权限
      * @param id 权限ID
-     * @return JsonResult
+     * @return ResponseJson
      */
     @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
-    public JsonResult deletePermission(@PathVariable Long id){
-        return permissionService.freezePermissionAndRolePermissionByPermissionId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+    public ResponseJson deletePermission(@PathVariable Long id){
+        return permissionService.freezePermissionAndRolePermissionByPermissionId(id) ? ResponseJson.success("操作成功") : ResponseJson.error("操作失败");
     }
 
     /**
      * 恢复权限
      * @param id 权限ID
-     * @return JsonResult
+     * @return ResponseJson
      */
     @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
-    public JsonResult recoverPermission(@PathVariable Long id){
-        return permissionService.recoverPermissionAndRolePermissionByPermissionId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
+    public ResponseJson recoverPermission(@PathVariable Long id){
+        return permissionService.recoverPermissionAndRolePermissionByPermissionId(id) ? ResponseJson.success("操作成功") : ResponseJson.error("操作失败");
     }
 
     /**
      * 分页信息
      * @param page 分页参数
-     * @return JsonResult
+     * @return ResponseJson
      */
     @PostMapping("/findPage")
-    public JsonResult findPage(@RequestBody PageRequest page){
-        return JsonResult.success(permissionService.findPage(page.getSearchText(), page.getCurrent(), page.getSize()));
+    public ResponseJson findPage(@RequestBody PageRequest page){
+        return ResponseJson.success(permissionService.findPage(page.getSearchText(), page.getCurrent(), page.getSize()));
     }
 
     /**
      * 通过ID获取权限详情
      * @param id 权限ID
-     * @return JsonResult
+     * @return ResponseJson
      */
     @GetMapping("/{id}")
-    public JsonResult findOne(@PathVariable Long id){
+    public ResponseJson findOne(@PathVariable Long id){
         Permission permission = permissionService.getById(id);
-        return permission == null ? JsonResult.error("获取失败") : JsonResult.success(permission);
+        return permission == null ? ResponseJson.error("获取失败") : ResponseJson.success(permission);
     }
 
     /**
@@ -95,15 +95,15 @@ public class PermissionController {
      * @return 树
      */
     @GetMapping("/findPermissionTree")
-    public JsonResult findListByParentId(){
+    public ResponseJson findListByParentId(){
         List<PermissionTreeNode> tree = permissionService.findPermissionTree();
-        return JsonResult.success(tree);
+        return ResponseJson.success(tree);
     }
 
     @GetMapping("/findMenuList")
-    public JsonResult findMenuList(){
+    public ResponseJson findMenuList(){
         List<Permission> menu = permissionService.findMenuList();
-        return JsonResult.success(menu);
+        return ResponseJson.success(menu);
     }
 
 }
