@@ -15,12 +15,12 @@ public class ResponseJson {
     /**
      * http 状态码
      */
-    private int code;
+    private int status;
 
     /**
      * 返回信息
      */
-    private String msg;
+    private String message;
 
     /**
      * 返回数据
@@ -30,9 +30,9 @@ public class ResponseJson {
     public ResponseJson() {
     }
 
-    private ResponseJson(int code, String msg, Object data) {
-        this.code = code;
-        this.msg = msg;
+    private ResponseJson(int status, String message, Object data) {
+        this.status = status;
+        this.message = message;
         this.data = data;
     }
 

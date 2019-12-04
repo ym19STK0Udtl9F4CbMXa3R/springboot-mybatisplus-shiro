@@ -58,6 +58,7 @@ public class WebController {
      * 未授权操作
      * @return msg
      */
+    @CrossOrigin
     @RequestMapping(path = "/401")
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseJson unauthorized() {
