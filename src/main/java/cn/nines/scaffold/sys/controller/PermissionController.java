@@ -6,6 +6,7 @@ import cn.nines.scaffold.common.result.PageRequest;
 import cn.nines.scaffold.sys.entity.Permission;
 import cn.nines.scaffold.sys.entity.PermissionTreeNode;
 import cn.nines.scaffold.sys.service.PermissionService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @author Nines
  * @since 2019-11-25
  */
+@RequiresAuthentication
 @RestController
 @RequestMapping("/sys/permission")
 public class PermissionController {

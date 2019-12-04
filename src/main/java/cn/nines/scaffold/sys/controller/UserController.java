@@ -7,6 +7,7 @@ import cn.nines.scaffold.sys.entity.User;
 import cn.nines.scaffold.sys.entity.UserRole;
 import cn.nines.scaffold.sys.service.UserRoleService;
 import cn.nines.scaffold.sys.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +19,12 @@ import java.util.List;
  * 用户 前端控制器
  * </p>
  *
+ * RequiresAuthentication 需要登录验证
  * @author Nines
  * @since 2019-11-25
  */
+@RequiresAuthentication
 @RestController
-//@RequiresAuthentication
 @RequestMapping("/sys/user")
 public class UserController {
 
@@ -31,17 +33,6 @@ public class UserController {
 
     @Resource
     private UserRoleService userRoleService;
-
-    /**
-     * 判断用户名是否存在
-     * @param username 用户名
-     * @return msg：操作是否成功
-     */
-    @GetMapping("/exists")
-    public ResponseJson findByUsername(String username){
-        User user = userService.getUserByUsername(username);
-        return user == null ? ResponseJson.success("用户名可用") : ResponseJson.error("用户名已存在");
-    }
 
     /**
      * 添加用户
