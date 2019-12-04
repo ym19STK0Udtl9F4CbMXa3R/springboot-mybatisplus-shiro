@@ -27,5 +27,5 @@ public interface RolePermissionService extends IService<RolePermission> {
      * @param rolePermissions 角色权限列表
      * @return 成功与否
      */
-    boolean modifyUserRole(List<RolePermission> rolePermissions);
+    boolean modifyUserRole(Long roleId, List<RolePermission> rolePermissions);
 }

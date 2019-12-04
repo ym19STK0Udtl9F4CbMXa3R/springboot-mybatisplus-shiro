@@ -26,9 +26,6 @@ public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper,
     @Resource
     private RolePermissionMapper rolePermissionMapper;
 
-    @Resource
-    private RolePermissionService rolePermissionService;
-
     @Override
     public List<RolePermission> findListByRid(Long rid) {
         QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
@@ -38,19 +35,23 @@ public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper,
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean modifyUserRole(List<RolePermission> rolePermissions) {
+    public boolean modifyUserRole(Long roleId, List<RolePermission> rolePermissions) {
         // 删除原表角色权限
         QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
-        wrapper.eq("role_id", rolePermissions.get(0).getRoleId());
+        wrapper.eq("role_id", roleId);
         rolePermissionMapper.delete(wrapper);
 
-        // 迭代添加日期
-        rolePermissions.forEach(rolePermission -> {
-            rolePermission.setCreateTime(LocalDateTime.now());
-            rolePermission.setUpdateTime(LocalDateTime.now());
-        });
+        if (rolePermissions.size() > 0){
+            // 迭代添加日期
+            rolePermissions.forEach(rolePermission -> {
+                rolePermission.setCreateTime(LocalDateTime.now());
+                rolePermission.setUpdateTime(LocalDateTime.now());
+            });
 
-        // 新增角色权限 并返回处理结果
-        return rolePermissionService.saveBatch(rolePermissions);
+            // 新增角色权限 并返回处理结果
+            return rolePermissionMapper.insertAllBatch(rolePermissions);
+        }else {
+            return true;
+        }
     }
 }

@@ -26,9 +26,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Resource
     private UserRoleMapper userRoleMapper;
 
-    @Resource
-    private UserRoleService userRoleService;
-
     @Override
     public List<UserRole> findListByUid(Long uid) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
@@ -38,19 +35,24 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean modifyUserRole(List<UserRole> userRoles) {
+    public boolean modifyUserRole(Long userId, List<UserRole> userRoles) {
         // 删除该用户在用户角色表中的原数据
         QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userRoles.get(0).getUserId());
+        wrapper.eq("user_id", userId);
         userRoleMapper.delete(wrapper);
 
-        // 迭代添加日期
-        userRoles.forEach(userRole -> {
-            userRole.setCreateTime(LocalDateTime.now());
-            userRole.setUpdateTime(LocalDateTime.now());
-        });
+        if (userRoles.size() > 0){
+            // 迭代添加日期
+            userRoles.forEach(userRole -> {
+                userRole.setCreateTime(LocalDateTime.now());
+                userRole.setUpdateTime(LocalDateTime.now());
+            });
 
-        // 批量新增角色数据并返回
-        return userRoleService.saveBatch(userRoles);
+            // 批量新增角色数据并返回
+            return userRoleMapper.insertAllBatch(userRoles);
+        }else {
+            return true;
+        }
+
     }
 }

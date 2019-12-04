@@ -7,6 +7,7 @@ import cn.nines.scaffold.sys.entity.Role;
 import cn.nines.scaffold.sys.entity.RolePermission;
 import cn.nines.scaffold.sys.service.RolePermissionService;
 import cn.nines.scaffold.sys.service.RoleService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -65,6 +66,7 @@ public class RoleController {
      * @param id 角色ID
      * @return JsonResult
      */
+    @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public JsonResult deleteRole(@PathVariable Long id){
         return roleService.freezeRoleAndUserRoleAndRolePermissionByRoleId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
@@ -75,6 +77,7 @@ public class RoleController {
      * @param id 角色ID
      * @return JsonResult
      */
+    @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
     public JsonResult recoverRole(@PathVariable Long id){
         return roleService.recoverRoleAndUserRoleAndRolePermissionByRoleId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
@@ -117,8 +120,8 @@ public class RoleController {
      * @return JsonResult
      */
     @PostMapping("/modifyRolePermission")
-    public JsonResult modifyUserRole(@RequestBody List<RolePermission> rolePermissions){
-        return rolePermissionService.modifyUserRole(rolePermissions) ? JsonResult.success("分配成功") : JsonResult.error("分配失败");
+    public JsonResult modifyUserRole(Long roleId, @RequestBody List<RolePermission> rolePermissions){
+        return rolePermissionService.modifyUserRole(roleId, rolePermissions) ? JsonResult.success("分配成功") : JsonResult.error("分配失败");
     }
 
 }

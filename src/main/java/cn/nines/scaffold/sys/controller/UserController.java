@@ -7,6 +7,8 @@ import cn.nines.scaffold.sys.entity.User;
 import cn.nines.scaffold.sys.entity.UserRole;
 import cn.nines.scaffold.sys.service.UserRoleService;
 import cn.nines.scaffold.sys.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,6 +23,7 @@ import java.util.List;
  * @since 2019-11-25
  */
 @RestController
+//@RequiresAuthentication
 @RequestMapping("/sys/user")
 public class UserController {
 
@@ -66,6 +69,7 @@ public class UserController {
      * @param id 用户ID
      * @return JsonResult
      */
+    @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public JsonResult deleteUser(@PathVariable Long id){
         return userService.freezeUserAndUserRoleByUserId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
@@ -76,6 +80,7 @@ public class UserController {
      * @param id 用户ID
      * @return JsonResult
      */
+    @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
     public JsonResult recoverUser(@PathVariable Long id){
         return userService.recoverUserAndUserRoleByUserId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
@@ -117,9 +122,11 @@ public class UserController {
      * @param userRoles 用户角色信息
      * @return JsonResult
      */
+    // 未知问题，Transactional 加在impl层不会回滚
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/modifyUserRole")
-    public JsonResult modifyUserRole(@RequestBody List<UserRole> userRoles){
-        return userRoleService.modifyUserRole(userRoles) ? JsonResult.success("分配成功") : JsonResult.error("分配失败");
+    public JsonResult modifyUserRole(Long userId, @RequestBody List<UserRole> userRoles){
+        return userRoleService.modifyUserRole(userId, userRoles) ? JsonResult.success("分配成功") : JsonResult.error("分配失败");
     }
 
 }

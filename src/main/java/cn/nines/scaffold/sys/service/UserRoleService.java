@@ -27,6 +27,6 @@ public interface UserRoleService extends IService<UserRole> {
      * @param userRoles 用户角色列表
      * @return 成功与否
      */
-    boolean modifyUserRole(List<UserRole> userRoles);
+    boolean modifyUserRole(Long userId, List<UserRole> userRoles);
 
 }

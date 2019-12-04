@@ -39,9 +39,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private UserRoleMapper userRoleMapper;
 
-    @Resource
-    private UserRoleService userRoleService;
-
     @Override
     public User getUserByUsername(String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -74,25 +71,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 冻结用户（恢复用户）
         User user = userMapper.selectById(id);
         if (user != null){
-            try {
-                user.setStatus(status);
-                user.setUpdateTime(LocalDateTime.now());
-                userMapper.updateById(user);
+            user.setStatus(status);
+            user.setUpdateTime(LocalDateTime.now());
+            userMapper.updateById(user);
 
-                // 冻结用户角色表中的关联数据（恢复用户角色表中的关联数据）
-                QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
-                wrapper.eq("user_id", id);
-                List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
-                if (userRoles.size() > 0){
-                    userRoles.forEach(userRole -> {
-                        userRole.setStatus(status);
-                        userRole.setUpdateTime(LocalDateTime.now());
-                    });
-                    userRoleService.updateBatchById(userRoles);
-                }
+            // 冻结用户角色表中的关联数据（恢复用户角色表中的关联数据）
+            QueryWrapper<UserRole> wrapper = new QueryWrapper<>();
+            wrapper.eq("user_id", id);
+            List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
+            if (userRoles.size() > 0){
+                userRoles.forEach(userRole -> {
+                    userRole.setStatus(status);
+                    userRole.setUpdateTime(LocalDateTime.now());
+                });
+                return userRoleMapper.updateAllBatchById(userRoles);
+            }else {
                 return true;
-            }catch (Exception e){
-                return false;
             }
         }
         return false;

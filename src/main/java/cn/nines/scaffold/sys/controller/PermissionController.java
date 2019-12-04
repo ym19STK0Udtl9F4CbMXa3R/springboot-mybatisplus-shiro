@@ -6,6 +6,7 @@ import cn.nines.scaffold.common.result.PageRequest;
 import cn.nines.scaffold.sys.entity.Permission;
 import cn.nines.scaffold.sys.entity.PermissionTreeNode;
 import cn.nines.scaffold.sys.service.PermissionService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -51,6 +52,7 @@ public class PermissionController {
      * @param id 权限ID
      * @return JsonResult
      */
+    @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public JsonResult deletePermission(@PathVariable Long id){
         return permissionService.freezePermissionAndRolePermissionByPermissionId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");
@@ -61,6 +63,7 @@ public class PermissionController {
      * @param id 权限ID
      * @return JsonResult
      */
+    @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
     public JsonResult recoverPermission(@PathVariable Long id){
         return permissionService.recoverPermissionAndRolePermissionByPermissionId(id) ? JsonResult.success("操作成功") : JsonResult.error("操作失败");

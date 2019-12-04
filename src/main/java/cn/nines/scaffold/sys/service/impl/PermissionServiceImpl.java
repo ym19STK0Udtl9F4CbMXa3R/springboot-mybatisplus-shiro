@@ -40,9 +40,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Resource
     private RolePermissionMapper rolePermissionMapper;
 
-    @Resource
-    private RolePermissionService rolePermissionService;
-
     @Override
     public boolean addPermission(Permission permission) {
         permission.setCreateTime(LocalDateTime.now());
@@ -69,28 +66,24 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private boolean updatePermissionAndRolePermissionByPermissionId(Long id, boolean status){
         Permission permission = permissionMapper.selectById(id);
         if (permission != null){
-            try {
-                // // 冻结权限（恢复权限）
-                permission.setStatus(status);
-                permission.setUpdateTime(LocalDateTime.now());
-                permissionMapper.updateById(permission);
+            // // 冻结权限（恢复权限）
+            permission.setStatus(status);
+            permission.setUpdateTime(LocalDateTime.now());
+            permissionMapper.updateById(permission);
 
-                // 冻结角色权限表中的关联数据（恢复角色权限表中的关联数据） 权限相关角色
-                QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
-                wrapper.eq("permission_id", id);
-                List<RolePermission> rolePermissions = rolePermissionMapper.selectList(wrapper);
+            // 冻结角色权限表中的关联数据（恢复角色权限表中的关联数据） 权限相关角色
+            QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
+            wrapper.eq("permission_id", id);
+            List<RolePermission> rolePermissions = rolePermissionMapper.selectList(wrapper);
 
-                if (rolePermissions.size() > 0){
-                    rolePermissions.forEach(rolePermission -> {
-                        rolePermission.setStatus(status);
-                        rolePermission.setUpdateTime(LocalDateTime.now());
-                    });
-                    rolePermissionService.updateBatchById(rolePermissions);
-                }
-
+            if (rolePermissions.size() > 0){
+                rolePermissions.forEach(rolePermission -> {
+                    rolePermission.setStatus(status);
+                    rolePermission.setUpdateTime(LocalDateTime.now());
+                });
+                return rolePermissionMapper.updateAllBatchById(rolePermissions);
+            }else {
                 return true;
-            }catch (Exception e){
-                return false;
             }
         }
         return false;
