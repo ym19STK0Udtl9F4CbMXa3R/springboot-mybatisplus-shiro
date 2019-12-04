@@ -35,6 +35,14 @@ public class PasswordSaltUtil {
         return user;
     }
 
+    public static String md5(String password, String salt){
+        // 使用加密算法 md5
+        String encryptionAlgorithm = "md5";
+        //反复加密的次数，md5(md5(""))
+        int times = 2;
+        return new SimpleHash(encryptionAlgorithm, password, salt, times).toString();
+    }
+
     public static void main(String[] args){
 
         User user = new User();
