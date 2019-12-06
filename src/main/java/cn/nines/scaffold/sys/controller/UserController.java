@@ -8,6 +8,7 @@ import cn.nines.scaffold.sys.entity.UserRole;
 import cn.nines.scaffold.sys.service.UserRoleService;
 import cn.nines.scaffold.sys.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,7 @@ public class UserController {
      * @param user 用户
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:add"})
     @PostMapping("/add")
     public ResponseJson saveUser(@RequestBody User user){
         return userService.addUser(user) ? ResponseJson.success("添加成功") : ResponseJson.error("添加失败");
@@ -49,6 +51,7 @@ public class UserController {
      * @param user 用户
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:update"})
     @PutMapping("/update")
     public ResponseJson addUser(@RequestBody User user){
         return userService.updateUser(user) ? ResponseJson.success("更新成功") : ResponseJson.error("更新失败");
@@ -59,6 +62,7 @@ public class UserController {
      * @param id 用户ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:freeze"})
     @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public ResponseJson deleteUser(@PathVariable Long id){
@@ -70,6 +74,7 @@ public class UserController {
      * @param id 用户ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:recover"})
     @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
     public ResponseJson recoverUser(@PathVariable Long id){
@@ -81,6 +86,7 @@ public class UserController {
      * @param page 分页参数
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:show"})
     @PostMapping("/findPage")
     public ResponseJson findPage(@RequestBody PageRequest page){
         return ResponseJson.success(userService.findPage(page.getSearchText(), page.getCurrent(), page.getSize()));
@@ -91,6 +97,7 @@ public class UserController {
      * @param id 用户ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:show"})
     @GetMapping("/{id}")
     public ResponseJson findOne(@PathVariable Long id){
         User user = userService.findOne(id);
@@ -102,6 +109,7 @@ public class UserController {
      * @param uid 用户ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:show"})
     @GetMapping("/findUserRole/{uid}")
     public ResponseJson findUserRole(@PathVariable Long uid){
         return ResponseJson.success(userRoleService.findListByUid(uid));
@@ -112,6 +120,7 @@ public class UserController {
      * @param userRoles 用户角色信息
      * @return ResponseJson
      */
+    @RequiresPermissions({"user:distribution"})
     // 未知问题，Transactional 加在impl层不会回滚
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/modifyUserRole")

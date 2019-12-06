@@ -2,8 +2,10 @@ package cn.nines.scaffold.config.shiro.realm;
 
 import cn.nines.scaffold.common.util.JWTUtil;
 import cn.nines.scaffold.config.shiro.JWTToken;
+import cn.nines.scaffold.sys.entity.RolePermission;
 import cn.nines.scaffold.sys.entity.User;
-import cn.nines.scaffold.sys.service.UserService;
+import cn.nines.scaffold.sys.entity.UserRole;
+import cn.nines.scaffold.sys.service.*;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * @ClassName: MyRealm
@@ -36,6 +39,15 @@ public class MyRealm extends AuthorizingRealm {
     @Resource
     private UserService userService;
 
+    @Resource
+    private UserRoleService userRoleService;
+
+    @Resource
+    private RolePermissionService rolePermissionService;
+
+    @Resource
+    private PermissionService permissionService;
+
     /**
      * 使用JWT替代原生Token
      * 大坑！，必须重写此方法，不然Shiro会报错
@@ -57,9 +69,27 @@ public class MyRealm extends AuthorizingRealm {
         User user = userService.getUserByUsername(username);
 
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+
+        // 获取用户角色拥有的权限ID
+        List<UserRole> userRoles = userRoleService.findListByUid(user.getId());
+        List<Long> permissionIdList = new ArrayList<>();
+        userRoles.forEach(userRole -> {
+            List<RolePermission> rolePermissions = rolePermissionService.findListByRid(userRole.getRoleId());
+            rolePermissions.forEach(rolePermission -> permissionIdList.add(rolePermission.getPermissionId()));
+        });
+
+        // 通过权限ID获取权限
+        Set<String> permissions = new HashSet<>();
+        permissionIdList.forEach(permissionId -> {
+            String permCode = permissionService.getById(permissionId).getPermCode();
+            if (permCode != null){
+                permissions.add(permCode);
+            }
+        });
+        System.out.println(permissions);
+
 //        simpleAuthorizationInfo.addRole(user.getRole());
-//        Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
-//        simpleAuthorizationInfo.addStringPermissions(permission);
+        simpleAuthorizationInfo.addStringPermissions(permissions);
         return simpleAuthorizationInfo;
     }
 

@@ -63,7 +63,7 @@ public class ShiroConfiguration {
         factoryBean.setFilters(filterMap);
 
         factoryBean.setSecurityManager(securityManager);
-        factoryBean.setUnauthorizedUrl("/401");
+        factoryBean.setUnauthorizedUrl("/403");
 
         /*
          * 自定义url规则

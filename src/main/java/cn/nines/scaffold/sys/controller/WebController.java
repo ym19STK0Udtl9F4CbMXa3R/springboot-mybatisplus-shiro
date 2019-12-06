@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName: IndexController
@@ -44,7 +46,10 @@ public class WebController {
         User user = userService.getUserByUsername(loginUser.getUsername());
         if (user != null){
             if (user.getPassword().equals(PasswordSaltUtil.md5(loginUser.getPassword(), user.getSalt()))) {
-                return ResponseJson.success("登录成功", JWTUtil.sign(user.getUsername(), user.getPassword()));
+                Map<String, String> map = new HashMap<>();
+                map.put("nickName", user.getNickName());
+                map.put("token", JWTUtil.sign(user.getUsername(), user.getPassword()));
+                return ResponseJson.success("登录成功", map);
             } else {
                 return ResponseJson.error(ExceptionEnum.INCORRECT_ACCOUNT_OR_PASSWORD);
             }
@@ -55,7 +60,7 @@ public class WebController {
     }
 
     /**
-     * 未授权操作
+     * token过期或没有登录 返回401
      * @return msg
      */
     @CrossOrigin
@@ -63,5 +68,16 @@ public class WebController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseJson unauthorized() {
         return ResponseJson.error(ExceptionEnum.AUTHENTICATION_FAILED);
+    }
+
+    /**
+     * 没有权限 返回403
+     * @return msg
+     */
+    @CrossOrigin
+    @RequestMapping(path = "/403")
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseJson forbidden() {
+        return ResponseJson.error(ExceptionEnum.PERMISSION_DENIED);
     }
 }
