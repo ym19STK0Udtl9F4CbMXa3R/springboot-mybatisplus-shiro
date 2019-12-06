@@ -28,7 +28,8 @@ public enum  ExceptionEnum {
     ACCOUNT_IS_FROZEN(3004,"账号已冻结"),
     PLEASE_TRY_AGAIN(3005, "请重试"),
     UPLOAD_FAILED(4000, "上传失败"),
-    AUTHENTICATION_FAILED(4001, "未登录或身份认证失败，请重新登录");
+    AUTHENTICATION_FAILED(4001, "未登录或身份认证失败，请重新登录"),
+    PERMISSION_DENIED(4003, "权限不足，拒绝访问");
 
     private Integer exceptionCode;
 

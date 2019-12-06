@@ -39,10 +39,11 @@ public class GlobalExceptionHandler {
      * 捕捉UnauthorizedException
      * @return ResponseJson
      */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseJson handle401(UnauthorizedException e) {
-        return ResponseJson.error(401, e.getMessage());
+    public ResponseJson handle403(UnauthorizedException e) {
+        logger.error("Unauthorized异常: " + e.getMessage());
+        return ResponseJson.error(ExceptionEnum.PERMISSION_DENIED);
     }
 
     /**
