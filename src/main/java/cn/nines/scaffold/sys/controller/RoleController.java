@@ -8,6 +8,7 @@ import cn.nines.scaffold.sys.entity.RolePermission;
 import cn.nines.scaffold.sys.service.RolePermissionService;
 import cn.nines.scaffold.sys.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class RoleController {
      * 获取所有角色信息
      * @return list
      */
+    @RequiresPermissions({"user:show"})
     @GetMapping("/list")
     public ResponseJson getRoleList(){
         List<Role> roles = roleService.findList();
@@ -48,6 +50,7 @@ public class RoleController {
      * @param role 角色
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:add"})
     @PostMapping("/add")
     public ResponseJson addRole(@RequestBody Role role){
         return roleService.addRole(role) ? ResponseJson.success("添加成功") : ResponseJson.error("添加失败");
@@ -58,6 +61,7 @@ public class RoleController {
      * @param role 角色
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:update"})
     @PutMapping("/update")
     public ResponseJson updateRole(@RequestBody Role role){
         return roleService.updateRole(role) ? ResponseJson.success("更新成功") : ResponseJson.error("更新失败");
@@ -68,6 +72,7 @@ public class RoleController {
      * @param id 角色ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:freeze"})
     @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public ResponseJson deleteRole(@PathVariable Long id){
@@ -79,6 +84,7 @@ public class RoleController {
      * @param id 角色ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:recover"})
     @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
     public ResponseJson recoverRole(@PathVariable Long id){
@@ -90,6 +96,7 @@ public class RoleController {
      * @param page 分页参数
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:show"})
     @PostMapping("/findPage")
     public ResponseJson findPage(@RequestBody PageRequest page){
         return ResponseJson.success(roleService.findPage(page.getSearchText(), page.getCurrent(), page.getSize()));
@@ -100,6 +107,7 @@ public class RoleController {
      * @param id 角色ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:show"})
     @GetMapping("/{id}")
     public ResponseJson findOne(@PathVariable Long id){
         Role role = roleService.getById(id);
@@ -111,16 +119,18 @@ public class RoleController {
      * @param rid 角色ID
      * @return JsonResult1
      */
+    @RequiresPermissions({"role:show"})
     @GetMapping("/findRolePermission/{rid}")
     public ResponseJson findUserRole(@PathVariable Long rid){
         return ResponseJson.success(rolePermissionService.findListByRid(rid));
     }
 
     /**
-     * 修改用户的角色
-     * @param rolePermissions 用户角色信息
+     * 修改角色的权限
+     * @param rolePermissions 角色权限信息
      * @return ResponseJson
      */
+    @RequiresPermissions({"role:distribution"})
     @PostMapping("/modifyRolePermission")
     public ResponseJson modifyUserRole(Long roleId, @RequestBody List<RolePermission> rolePermissions){
         return rolePermissionService.modifyUserRole(roleId, rolePermissions) ? ResponseJson.success("分配成功") : ResponseJson.error("分配失败");

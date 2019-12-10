@@ -7,6 +7,7 @@ import cn.nines.scaffold.sys.entity.Permission;
 import cn.nines.scaffold.sys.entity.PermissionTreeNode;
 import cn.nines.scaffold.sys.service.PermissionService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class PermissionController {
      * @param permission 权限
      * @return ResponseJson
      */
+    @RequiresPermissions({"permission:add"})
     @PostMapping("/add")
     public ResponseJson addPermission(@RequestBody Permission permission){
         return permissionService.addPermission(permission) ? ResponseJson.success("添加成功") : ResponseJson.error("添加失败");
@@ -44,6 +46,7 @@ public class PermissionController {
      * @param permission 权限
      * @return ResponseJson
      */
+    @RequiresPermissions({"permission:update"})
     @PutMapping("/update")
     public ResponseJson updatePermission(@RequestBody Permission permission){
         return permissionService.updatePermission(permission) ? ResponseJson.success("更新成功") : ResponseJson.error("更新失败");
@@ -54,6 +57,7 @@ public class PermissionController {
      * @param id 权限ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"permission:freeze"})
     @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public ResponseJson deletePermission(@PathVariable Long id){
@@ -65,6 +69,7 @@ public class PermissionController {
      * @param id 权限ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"permission:recover"})
     @Transactional(rollbackFor = Exception.class)
     @PutMapping("/{id}")
     public ResponseJson recoverPermission(@PathVariable Long id){
@@ -76,6 +81,7 @@ public class PermissionController {
      * @param page 分页参数
      * @return ResponseJson
      */
+    @RequiresPermissions({"permission:show"})
     @PostMapping("/findPage")
     public ResponseJson findPage(@RequestBody PageRequest page){
         return ResponseJson.success(permissionService.findPage(page.getSearchText(), page.getCurrent(), page.getSize()));
@@ -86,6 +92,7 @@ public class PermissionController {
      * @param id 权限ID
      * @return ResponseJson
      */
+    @RequiresPermissions({"permission:show"})
     @GetMapping("/{id}")
     public ResponseJson findOne(@PathVariable Long id){
         Permission permission = permissionService.getById(id);
@@ -96,12 +103,14 @@ public class PermissionController {
      * 获取权限树
      * @return 树
      */
+    @RequiresPermissions({"role:show"})
     @GetMapping("/findPermissionTree")
     public ResponseJson findListByParentId(){
         List<PermissionTreeNode> tree = permissionService.findPermissionTree();
         return ResponseJson.success(tree);
     }
 
+    @RequiresPermissions({"permission:show"})
     @GetMapping("/findMenuList")
     public ResponseJson findMenuList(){
         List<Permission> menu = permissionService.findMenuList();
