@@ -22,7 +22,7 @@ public class JWTUtil {
 
     // 过期时间30天
 //    private static final long EXPIRE_TIME = 24 * 60 * 30 * 1000;
-    private static final long EXPIRE_TIME = 10 * 60 * 1000;
+    private static final long EXPIRE_TIME = 30 * 60 * 1000;
 
     /**
      * 校验token是否正确

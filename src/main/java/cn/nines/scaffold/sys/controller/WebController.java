@@ -59,6 +59,11 @@ public class WebController {
 
     }
 
+    @GetMapping("/live")
+    public ResponseJson isLive(){
+        return ResponseJson.success(true);
+    }
+
     /**
      * token过期或没有登录 返回401
      * @return msg
