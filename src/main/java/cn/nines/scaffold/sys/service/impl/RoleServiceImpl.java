@@ -46,7 +46,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public List<Role> findList() {
-        return roleMapper.selectList(null);
+        QueryWrapper<Role> wrapper = new QueryWrapper<>();
+        // 只查找有效的
+        wrapper.eq("status", true);
+        return roleMapper.selectList(wrapper);
     }
 
     @Override

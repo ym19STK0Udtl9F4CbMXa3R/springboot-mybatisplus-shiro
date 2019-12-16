@@ -132,6 +132,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public List<Permission> findMenuList() {
         QueryWrapper<Permission> wrapper = new QueryWrapper<>();
         wrapper.in("type",0,1);
+        // 只查找有效的
+        wrapper.eq("status",true);
         return permissionMapper.selectList(wrapper);
     }
 
@@ -144,16 +146,19 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         List<PermissionTreeNode> tree = new ArrayList<>();
         // 遍历权限
         permissions.forEach(permission -> {
-            // 查询是否有子节点
-            List<Permission> childrenPermissions = findListByParentId(permission.getId());
-            if (childrenPermissions.size() > 0){
-                // 获取子树
-                List<PermissionTreeNode> childrenTree = addNodeToTree(childrenPermissions);
-                // 添加当前节点到树，有子节点
-                tree.add(new PermissionTreeNode(permission.getId(), permission.getName(), childrenTree));
-            }else {
-                // 添加当前节点到树，没有子节点
-                tree.add(new PermissionTreeNode(permission.getId(), permission.getName(), null));
+            // 判断此节点是否有效
+            if (permission.getStatus()){
+                // 查询是否有子节点
+                List<Permission> childrenPermissions = findListByParentId(permission.getId());
+                if (childrenPermissions.size() > 0){
+                    // 获取子树
+                    List<PermissionTreeNode> childrenTree = addNodeToTree(childrenPermissions);
+                    // 添加当前节点到树，有子节点
+                    tree.add(new PermissionTreeNode(permission.getId(), permission.getName(), childrenTree));
+                }else {
+                    // 添加当前节点到树，没有子节点
+                    tree.add(new PermissionTreeNode(permission.getId(), permission.getName(), null));
+                }
             }
         });
         return tree;
